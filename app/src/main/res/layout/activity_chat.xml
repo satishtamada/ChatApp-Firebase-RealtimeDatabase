@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.RecyclerView
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/footer"
+        android:visibility="gone"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:scrollbars="vertical" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:indeterminateTint="@color/colorPrimaryDark"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="gone" />
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:background="#000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/idInputMessage"
+            android:hint="message"
+            android:layout_centerVertical="true"
+            android:padding="15sp"
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/idBtnSend"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimary"
+            android:text="send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</RelativeLayout>

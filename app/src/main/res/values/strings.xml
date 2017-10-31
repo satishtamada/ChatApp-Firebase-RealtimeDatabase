@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ChatDemo</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">login</string>
+    <string name="msg_please_enter_details">Please enter your details</string>
+    <string name="error_user_count_increased">Sorry..!Two users exited.</string>
+</resources>
