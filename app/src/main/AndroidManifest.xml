@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tamada.chatdemo">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:name=".app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,11 +22,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.ChatActivity"/>
+        <activity android:name=".activity.ChatActivity" />
+
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_uJmv0AK2JLwkj0"
-            />
+            android:value="rzp_test_uJmv0AK2JLwkj0" />
     </application>
 
 </manifest>

@@ -18,7 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tamada.chatdemo.R;
-import com.tamada.chatdemo.app.AppController;
 import com.tamada.chatdemo.helper.PreferManager;
 import com.tamada.chatdemo.models.User;
 import com.tamada.chatdemo.receivers.ConnectivityReceiver;
@@ -64,12 +63,14 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        if (!ConnectivityReceiver.isConnected()) {
-            Toast.makeText(AppController.getInstance().getApplicationContext(), getString(R.string.lbl_error_internet), Toast.LENGTH_SHORT).show();
+        ConnectivityReceiver connectivityReceiver=new ConnectivityReceiver(getApplicationContext());
+        if (!connectivityReceiver.isConnected()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.lbl_error_internet), Toast.LENGTH_SHORT).show();
+        }else{
+            progressBar.setVisibility(View.VISIBLE);
         }
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("users");
-        progressBar.setVisibility(View.VISIBLE);
         /**
          * checks number of users in db
          */

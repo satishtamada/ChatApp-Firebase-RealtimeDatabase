@@ -8,13 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +26,6 @@ import com.razorpay.ExternalWalletListener;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultListener;
 import com.tamada.chatdemo.R;
-import com.tamada.chatdemo.app.AppController;
 import com.tamada.chatdemo.helper.PreferManager;
 import com.tamada.chatdemo.models.User;
 import com.tamada.chatdemo.receivers.ConnectivityReceiver;
@@ -81,8 +78,9 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         /**
          * checks is internet enable or not
          */
-        if (!ConnectivityReceiver.isConnected()) {
-            Toast.makeText(AppController.getInstance().getApplicationContext(), getString(R.string.lbl_error_internet), Toast.LENGTH_SHORT).show();
+        ConnectivityReceiver connectivityReceiver=new ConnectivityReceiver(getApplicationContext());
+        if (!connectivityReceiver.isConnected()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.lbl_error_internet), Toast.LENGTH_SHORT).show();
         }
         Log.e("user is", currentUserId + "," + currentUserEmail);
         mFirebaseInstance = FirebaseDatabase.getInstance();
@@ -123,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                                 lblFriendEmail.setText(strFriendEmail);
                                 layoutChatHead.setVisibility(View.VISIBLE);
                                 fab.setVisibility(View.VISIBLE);
+                                lblEmptyList.setVisibility(View.GONE);
+
                             }
                         }
                     }else{
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                 preferManager.clearSession();
                 startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                ref.child("user").child(currentUserId).removeValue();
+                ref.child("users").child(currentUserId).removeValue();
                 Toast.makeText(getApplicationContext(),"Successfully logged out..",Toast.LENGTH_LONG).show();
                 return true;
 

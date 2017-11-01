@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.tamada.chatdemo.app.AppController;
-
 
 /**
  * Created by inventbird on 15/6/16.
@@ -15,13 +13,15 @@ import com.tamada.chatdemo.app.AppController;
 public class ConnectivityReceiver extends BroadcastReceiver {
 
     public static ConnectivityReceiverListener connectivityReceiverListener;
-
-    public ConnectivityReceiver() {
+    public  Context context;
+    public ConnectivityReceiver(Context context) {
         super();
+        this.context=context;
     }
 
     @Override
     public void onReceive(Context context, Intent arg1) {
+
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -37,9 +37,9 @@ public class ConnectivityReceiver extends BroadcastReceiver {
      * Method returns network status is connected or not
      * @return true or false
      */
-    public static boolean isConnected() {
+    public boolean isConnected() {
         ConnectivityManager
-                cm = (ConnectivityManager) AppController.getInstance().getApplicationContext()
+                cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null

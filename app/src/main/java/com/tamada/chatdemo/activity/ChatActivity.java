@@ -46,6 +46,9 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+
     private PreferManager preferManager;
     private FirebaseDatabase mFirebaseInstance;
     private String chatId;
@@ -53,7 +56,6 @@ public class ChatActivity extends AppCompatActivity {
     private MessagesAdapter messagesAdapter;
     private ArrayList<Message> latLongModelArrayList;
     private DatabaseReference mFirebaseDatabase;
-    private ProgressBar progressBar;
     private User currentUser;
 
     @Override
@@ -66,13 +68,9 @@ public class ChatActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("messages");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        etInputMessage = (EditText) findViewById(R.id.idInputMessage);
-        btnSendMessage = (Button) findViewById(R.id.idBtnSend);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
         mFirebaseInstance = FirebaseDatabase.getInstance();
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         preferManager = new PreferManager(getApplicationContext());
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         currentUserId = preferManager.getUser().getId();
         currentUserName = preferManager.getUser().getUserName();
         currentUserEmail=preferManager.getUser().getEmail();

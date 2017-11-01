@@ -1,11 +1,14 @@
 package com.tamada.chatdemo.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tamada.chatdemo.R;
@@ -47,10 +50,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Message message = messageList.get(position);
+        Log.e("name",message.getFromName());
         if (currentUserName.equals(message.getFromName())) {
-            holder.lblName.setGravity(Gravity.RIGHT);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.lblName.setLayoutParams(params);
+           // holder.lblName.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
+            holder.lblName.setTextColor(ContextCompat.getColor(context,R.color.colorAccent));
         } else {
-            holder.lblName.setGravity(Gravity.LEFT);
+            holder.lblName.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
 
         }
         holder.lblName.setText(message.getMessage());
