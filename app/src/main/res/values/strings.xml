@@ -5,4 +5,11 @@
     <string name="login">login</string>
     <string name="msg_please_enter_details">Please enter your details</string>
     <string name="error_user_count_increased">Sorry..!Two users exited.</string>
+    <string name="lbl_error_internet">Please check your internet connection</string>
+    <string name="lbl_email_error">Please enter valid email address</string>
+    <string name="no_friend_available">No friend available</string>
+    <string name="lbl_alert_title">Make Payment</string>
+    <string name="lbl_alert_desc">You need to make payment for read or write message</string>
+    <string name="lbl_yes">Yes</string>
+    <string name="lbl_no">No</string>
 </resources>

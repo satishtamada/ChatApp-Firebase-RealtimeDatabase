@@ -7,34 +7,22 @@ import com.google.firebase.database.IgnoreExtraProperties;
  */
 
 @IgnoreExtraProperties
-public class UserModel {
+public class User {
     private String id;
     private String userName;
+    private String email;
     private String password;
-    private boolean paymentStatus;
+    private boolean isPaid;
 
-    public boolean isPaid() {
-        return paymentStatus;
+    public User() {
     }
 
-    public void setPaymentStatus(boolean paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public UserModel() {
-    }
-
-    public UserModel(String id, String userName, String password, boolean paymentStatus) {
+    public User(String id, String userName, String email, String password, boolean isPaid) {
         this.id = id;
         this.userName = userName;
+        this.email = email;
         this.password = password;
-        this.paymentStatus = paymentStatus;
-    }
-
-    public UserModel(String id, String userName, String password) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
+        this.isPaid = isPaid;
     }
 
     public String getId() {
@@ -53,11 +41,27 @@ public class UserModel {
         this.userName = userName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
     }
 }

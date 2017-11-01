@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.tamada.chatdemo.models.UserModel;
+import com.tamada.chatdemo.models.User;
 
 import java.util.HashMap;
 
@@ -23,8 +23,9 @@ public class PreferManager {
     // All Shared Preferences Keys
     private static final String KEY_ID = "id";
     private static final String KEY_PASSWORD = "password";
+    private static final String KEY_USER_NAME = "name";
     private static final String KEY_EMAIL = "email";
-    private static final String IS_PAYMENT_SUCCESS="payment_type";
+    private static final String IS_PAYMENT_SUCCESS = "payment_type";
 
     @SuppressLint("CommitPrefEdits")
     public PreferManager(Context context) {
@@ -34,36 +35,51 @@ public class PreferManager {
         editor = pref.edit();
     }
 
-
+    /**
+     * method fetch user detail from prefermanager
+     * @return user
+     */
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> profile = new HashMap<>();
         profile.put("password", pref.getString(KEY_PASSWORD, null));
         profile.put("email", pref.getString(KEY_EMAIL, null));
         profile.put("id", pref.getString(KEY_ID, null));
+        profile.put("name", pref.getString(KEY_USER_NAME, null));
         return profile;
     }
 
-    public UserModel getUser() {
+    /**
+     * method return user data
+     * @return user object
+     */
+    public User getUser() {
         if (pref.getString(KEY_ID, null) != null) {
-            String name, email, mobile, api_key;
+            String name, email, password, api_key;
             api_key = pref.getString(KEY_ID, null);
             email = pref.getString(KEY_EMAIL, null);
-            return new UserModel(api_key, email, "", false);
+            name = pref.getString(KEY_USER_NAME, null);
+            return new User(api_key, name, email, "", false);
         }
         return null;
     }
 
-
+    /**
+     * method clear all data from prefermanger
+     */
     public void clearSession() {
         editor.clear();
         editor.commit();
     }
 
 
-
-    public void storeUser(UserModel user) {
+    /**
+     * method store all user data
+     * @param user user object
+     */
+    public void storeUser(User user) {
         editor.putString(KEY_ID, user.getId());
-        editor.putString(KEY_EMAIL, user.getUserName());
+        editor.putString(KEY_EMAIL, user.getEmail());
+        editor.putString(KEY_USER_NAME, user.getUserName());
         editor.putBoolean(IS_PAYMENT_SUCCESS, user.isPaid());
         editor.commit();
     }

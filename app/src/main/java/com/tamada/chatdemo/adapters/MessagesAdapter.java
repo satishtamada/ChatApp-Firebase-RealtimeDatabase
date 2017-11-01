@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * Created by dev 18/2/16.
  */
-public class LatLongAdapter extends RecyclerView.Adapter<LatLongAdapter.MyViewHolder> {
-    private final List<Message> latLongModelList;
+public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
+    private final List<Message> messageList;
     private final Context context;
-    private String userId;
+    private String currentUserName;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public final TextView lblName;
@@ -31,10 +31,10 @@ public class LatLongAdapter extends RecyclerView.Adapter<LatLongAdapter.MyViewHo
     }
 
 
-    public LatLongAdapter(List<Message> latLongModelList, Context context, String userId) {
-        this.latLongModelList = latLongModelList;
+    public MessagesAdapter(List<Message> messageList, Context context, String currentUserName) {
+        this.messageList = messageList;
         this.context = context;
-        this.userId = userId;
+        this.currentUserName = currentUserName;
     }
 
     @Override
@@ -46,15 +46,20 @@ public class LatLongAdapter extends RecyclerView.Adapter<LatLongAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Message latLongModel = latLongModelList.get(position);
-        holder.lblName.setGravity(Gravity.RIGHT);
-        holder.lblName.setText(latLongModel.getMessage());
-        //  holder.lblAddress.setText(getCompleteAddressString(latLongModel.getLatitude(), latLongModel.getLongitude()) + " (" + latLongModel.getLatitude() + "," + latLongModel.getLongitude()+")");
+        final Message message = messageList.get(position);
+        if (currentUserName.equals(message.getFromName())) {
+            holder.lblName.setGravity(Gravity.RIGHT);
+        } else {
+            holder.lblName.setGravity(Gravity.LEFT);
+
+        }
+        holder.lblName.setText(message.getMessage());
+
     }
 
     @Override
     public int getItemCount() {
-        return latLongModelList.size();
+        return messageList.size();
     }
 
 }

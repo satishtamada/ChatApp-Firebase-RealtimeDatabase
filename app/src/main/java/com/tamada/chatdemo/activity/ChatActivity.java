@@ -20,12 +20,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tamada.chatdemo.R;
-import com.tamada.chatdemo.adapters.LatLongAdapter;
+import com.tamada.chatdemo.adapters.MessagesAdapter;
 import com.tamada.chatdemo.helper.PreferManager;
 import com.tamada.chatdemo.models.Message;
-import com.tamada.chatdemo.models.UserModel;
+import com.tamada.chatdemo.models.User;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by inventbird on 31/10/17.
@@ -33,25 +36,34 @@ import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
     private static final String TAG = ChatActivity.class.getSimpleName();
-    private EditText etInputMessage;
-    private Button btnSendMessage;
+
+    @BindView(R.id.input_message)
+    EditText etInputMessage;
+
+    @BindView(R.id.btn_send)
+    Button btnSendMessage;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     private PreferManager preferManager;
     private FirebaseDatabase mFirebaseInstance;
     private String chatId;
-    private String userId, email;
-    private RecyclerView recyclerView;
-    private LatLongAdapter latLongAdapter;
+    private String currentUserId,  currentUserName,currentUserEmail;
+    private MessagesAdapter messagesAdapter;
     private ArrayList<Message> latLongModelArrayList;
     private DatabaseReference mFirebaseDatabase;
     private ProgressBar progressBar;
-    private UserModel currentUser;
+    private User currentUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        ButterKnife.bind(this);
+
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("View All");
+            getSupportActionBar().setTitle("messages");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         etInputMessage = (EditText) findViewById(R.id.idInputMessage);
@@ -61,8 +73,10 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         preferManager = new PreferManager(getApplicationContext());
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        userId = preferManager.getUser().getId();
-        email = preferManager.getUser().getUserName();
+        currentUserId = preferManager.getUser().getId();
+        currentUserName = preferManager.getUser().getUserName();
+        currentUserEmail=preferManager.getUser().getEmail();
+
         FirebaseDatabase mFirebaseInstance = FirebaseDatabase.getInstance();
         // get reference to 'latlong' node
         latLongModelArrayList = new ArrayList<>();
@@ -71,6 +85,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         progressBar.setVisibility(View.VISIBLE);
         mFirebaseDatabase = mFirebaseInstance.getReference("messages");
+
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,11 +96,11 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         Log.e(TAG, "current User: " + currentUser);
-        mFirebaseInstance.getReference("users").child(userId).addValueEventListener(new ValueEventListener() {
+
+        mFirebaseInstance.getReference("users").child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                currentUser = dataSnapshot.getValue(UserModel.class);
-
+                currentUser = dataSnapshot.getValue(User.class);
                 Log.e(TAG, "current User: " + currentUser);
             }
 
@@ -104,8 +119,8 @@ public class ChatActivity extends AppCompatActivity {
                     Message note = noteSnapshot.getValue(Message.class);
                     latLongModelArrayList.add(note);
                 }
-                latLongAdapter = new LatLongAdapter(latLongModelArrayList, getApplicationContext(), userId);
-                recyclerView.setAdapter(latLongAdapter);
+                messagesAdapter = new MessagesAdapter(latLongModelArrayList, getApplicationContext(), currentUserName);
+                recyclerView.setAdapter(messagesAdapter);
                 /**
                  * once data fetched visible recyclerview and hide progressbar
                  */

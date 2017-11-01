@@ -5,15 +5,24 @@
     android:background="@color/colorPrimary">
 
     <LinearLayout
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:background="@color/colorPrimary"
         android:orientation="vertical"
         android:padding="15dp">
 
         <EditText
             android:id="@+id/input_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorWhite"
+            android:hint="Name"
+            android:padding="15dp" />
+
+        <EditText
+            android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -33,12 +42,24 @@
 
         <Button
             android:id="@+id/btn_login"
-            android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:background="@color/colorPrimaryDark"
             android:text="@string/login"
             android:textColor="@color/colorWhite" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:layout_alignParentBottom="true"
+        android:id="@+id/progressBar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false"
+        android:indeterminateTint="@color/colorWhite"
+        android:indeterminateTintMode="src_atop"
+        android:padding="10dp"
+        android:visibility="gone" />
 
 </RelativeLayout>
