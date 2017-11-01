@@ -50,7 +50,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Message message = messageList.get(position);
-        Log.e("name",message.getFromName());
+        //set gravity for current user messages
         if (currentUserName.equals(message.getFromName())) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
