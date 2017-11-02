@@ -31,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by inventbird on 31/10/17.
+ * Created by satish.
  */
 
 public class ChatActivity extends AppCompatActivity {

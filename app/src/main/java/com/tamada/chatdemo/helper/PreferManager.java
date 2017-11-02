@@ -9,7 +9,7 @@ import com.tamada.chatdemo.models.User;
 import java.util.HashMap;
 
 /**
- * Created by satish on 4/2/16.
+ * Created by satish .
  */
 public class PreferManager {
     // Shared Preferences

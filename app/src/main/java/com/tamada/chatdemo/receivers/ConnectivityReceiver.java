@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.tamada.chatdemo.helper.AppController;
+
 
 /**
  * Created by inventbird on 15/6/16.
@@ -37,9 +39,9 @@ public class ConnectivityReceiver extends BroadcastReceiver {
      * Method returns network status is connected or not
      * @return true or false
      */
-    public boolean isConnected() {
+    public static boolean isConnected() {
         ConnectivityManager
-                cm = (ConnectivityManager) context
+                cm = (ConnectivityManager) AppController.getInstance().getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null

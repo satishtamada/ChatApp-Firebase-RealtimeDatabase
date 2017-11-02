@@ -17,7 +17,7 @@ import com.tamada.chatdemo.models.Message;
 import java.util.List;
 
 /**
- * Created by dev 18/2/16.
+ * Created by satish .
  */
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
     private final List<Message> messageList;

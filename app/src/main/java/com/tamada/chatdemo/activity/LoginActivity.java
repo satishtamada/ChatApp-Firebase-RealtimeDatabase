@@ -63,8 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        ConnectivityReceiver connectivityReceiver=new ConnectivityReceiver(getApplicationContext());
-        if (!connectivityReceiver.isConnected()) {
+        if (!ConnectivityReceiver.isConnected()) {
             Toast.makeText(getApplicationContext(), getString(R.string.lbl_error_internet), Toast.LENGTH_SHORT).show();
         }else{
             progressBar.setVisibility(View.VISIBLE);

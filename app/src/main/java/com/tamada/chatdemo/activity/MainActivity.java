@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         /**
          * checks is internet enable or not
          */
-        ConnectivityReceiver connectivityReceiver=new ConnectivityReceiver(getApplicationContext());
-        if (!connectivityReceiver.isConnected()) {
+        if (!ConnectivityReceiver.isConnected()) {
             Toast.makeText(getApplicationContext(), getString(R.string.lbl_error_internet), Toast.LENGTH_SHORT).show();
         }
         Log.e("user is", currentUserId + "," + currentUserEmail);
