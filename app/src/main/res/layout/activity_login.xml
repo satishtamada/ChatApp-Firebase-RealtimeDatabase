@@ -13,6 +13,7 @@
         android:padding="15dp">
 
         <EditText
+            android:inputType="text"
             android:maxLines="1"
             android:id="@+id/input_name"
             android:layout_width="match_parent"
@@ -23,6 +24,7 @@
             android:padding="15dp" />
 
         <EditText
+            android:inputType="textEmailAddress"
             android:maxLines="1"
             android:id="@+id/input_email"
             android:layout_width="match_parent"
