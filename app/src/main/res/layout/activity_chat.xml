@@ -31,7 +31,7 @@
         android:layout_height="wrap_content">
         <EditText
             android:id="@+id/input_message"
-            android:hint="message"
+            android:hint="messagesModel"
             android:layout_centerVertical="true"
             android:padding="15sp"
             android:background="@color/colorWhite"

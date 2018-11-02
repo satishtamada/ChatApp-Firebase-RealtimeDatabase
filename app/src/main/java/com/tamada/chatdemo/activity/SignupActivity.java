@@ -2,7 +2,6 @@ package com.tamada.chatdemo.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tamada.chatdemo.R;
 import com.tamada.chatdemo.helper.PreferManager;
-import com.tamada.chatdemo.models.User;
+import com.tamada.chatdemo.models.UserModel;
 import com.tamada.chatdemo.receivers.ConnectivityReceiver;
 
 import butterknife.BindView;
@@ -128,10 +127,10 @@ public class SignupActivity extends AppCompatActivity {
             //get child node id
             userId = mFirebaseDatabase.push().getKey();
         }
-        //by default user payment is false
-        User user = new User(userId, name, email, password, false);
-        mFirebaseDatabase.child(userId).setValue(user);
-        preferManager.storeUser(user);
+        //by default userModel payment is false
+        UserModel userModel = new UserModel(userId, name, email, password, false);
+        mFirebaseDatabase.child(userId).setValue(userModel);
+        preferManager.storeUser(userModel);
         progressBar.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();

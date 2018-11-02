@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.tamada.chatdemo.models.User;
+import com.tamada.chatdemo.models.UserModel;
 
 import java.util.HashMap;
 
@@ -52,13 +52,13 @@ public class PreferManager {
      * method return user data
      * @return user object
      */
-    public User getUser() {
+    public UserModel getUser() {
         if (pref.getString(KEY_ID, null) != null) {
             String name, email, password, api_key;
             api_key = pref.getString(KEY_ID, null);
             email = pref.getString(KEY_EMAIL, null);
             name = pref.getString(KEY_USER_NAME, null);
-            return new User(api_key, name, email, "", false);
+            return new UserModel(api_key, name, email, "", false);
         }
         return null;
     }
@@ -73,14 +73,14 @@ public class PreferManager {
 
 
     /**
-     * method store all user data
-     * @param user user object
+     * method store all userModel data
+     * @param userModel userModel object
      */
-    public void storeUser(User user) {
-        editor.putString(KEY_ID, user.getId());
-        editor.putString(KEY_EMAIL, user.getEmail());
-        editor.putString(KEY_USER_NAME, user.getUserName());
-        editor.putBoolean(IS_PAYMENT_SUCCESS, user.isPaid());
+    public void storeUser(UserModel userModel) {
+        editor.putString(KEY_ID, userModel.getId());
+        editor.putString(KEY_EMAIL, userModel.getEmail());
+        editor.putString(KEY_USER_NAME, userModel.getUserName());
+        editor.putBoolean(IS_PAYMENT_SUCCESS, userModel.isPaid());
         editor.commit();
     }
 

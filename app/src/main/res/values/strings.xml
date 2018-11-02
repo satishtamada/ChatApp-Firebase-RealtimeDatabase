@@ -9,7 +9,7 @@
     <string name="lbl_email_error">Please enter valid email address</string>
     <string name="no_friend_available">No friend available</string>
     <string name="lbl_alert_title">Make Payment</string>
-    <string name="lbl_alert_desc">You need to make payment for read or write message</string>
+    <string name="lbl_alert_desc">You need to make payment for read or write messagesModel</string>
     <string name="lbl_yes">Yes</string>
     <string name="lbl_no">No</string>
 

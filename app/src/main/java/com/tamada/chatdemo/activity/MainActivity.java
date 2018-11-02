@@ -1,13 +1,10 @@
 package com.tamada.chatdemo.activity;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,21 +18,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.razorpay.Checkout;
-import com.razorpay.ExternalWalletListener;
-import com.razorpay.PaymentData;
-import com.razorpay.PaymentResultListener;
 import com.tamada.chatdemo.R;
+import com.tamada.chatdemo.adapters.ContactsAdapter;
+import com.tamada.chatdemo.adapters.MessagesAdapter;
 import com.tamada.chatdemo.helper.PreferManager;
-import com.tamada.chatdemo.models.User;
+import com.tamada.chatdemo.models.ContactModel;
+import com.tamada.chatdemo.models.MessagesModel;
+import com.tamada.chatdemo.models.UserModel;
 import com.tamada.chatdemo.receivers.ConnectivityReceiver;
 
-import org.json.JSONObject;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements PaymentResultListener, ExternalWalletListener {
+public class MainActivity extends AppCompatActivity{
     @BindView(R.id.friendName)
     TextView lblFriendName;
 
@@ -48,20 +45,21 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
     @BindView(R.id.idChatHead)
     CardView layoutChatHead;
 
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-
-
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     private PreferManager preferManager;
     private String currentUserId,  currentUserEmail,currentUserName;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
     private String strChatPersonName,strFriendEmail;
-    private User currentUser;
+    private UserModel currentUserModel;
 
+    private ContactsAdapter messagesAdapter;
+    private ArrayList<ContactModel> latLongModelArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         mFirebaseDatabase.child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                currentUser = dataSnapshot.getValue(User.class);
+                currentUserModel = dataSnapshot.getValue(UserModel.class);
                 progressBar.setVisibility(View.GONE);
             }
 
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteSnapshot : dataSnapshot.getChildren()) {
-                    User note = noteSnapshot.getValue(User.class);
+                    UserModel note = noteSnapshot.getValue(UserModel.class);
                     Log.e("here", note.getId());
                     //if users is available or not
                     if (dataSnapshot.getChildrenCount() > 1) {
@@ -119,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                                 lblFriendName.setText(strChatPersonName);
                                 lblFriendEmail.setText(strFriendEmail);
                                 layoutChatHead.setVisibility(View.VISIBLE);
-                                fab.setVisibility(View.VISIBLE);
                                 lblEmptyList.setVisibility(View.GONE);
 
                             }
@@ -130,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                          */
                        lblEmptyList.setVisibility(View.VISIBLE);
                        layoutChatHead.setVisibility(View.GONE);
-                       fab.setVisibility(View.GONE);
                     }
                 }
                 progressBar.setVisibility(View.GONE);
@@ -149,100 +145,6 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
                 startActivity(new Intent(getApplicationContext(), ChatActivity.class));
             }
         });
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkPaymentStatus();
-            }
-        });
-    }
-
-    /**
-     * method checks user payment details is paid or not
-     * if payment is not paid then show dialog for make a payment
-     */
-    private void checkPaymentStatus() {
-        if (currentUser.isPaid()) {
-            startActivity(new Intent(getApplicationContext(), ChatActivity.class));
-        } else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-            alert.setTitle(getString(R.string.lbl_alert_title));
-            alert.setMessage(getString(R.string.lbl_alert_desc));
-            alert.setPositiveButton(getString(R.string.lbl_yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    makePayment(currentUserName,"1234567890", currentUserEmail, "100");
-                    dialog.dismiss();
-                }
-            });
-
-            alert.setNegativeButton(getString(R.string.lbl_no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alert.show();
-        }
-    }
-
-    /**
-     * method lunch the payment sdk
-     * @param name user name
-     * @param mobile user mobile( set default mobile number)
-     * @param email user email
-     * @param amount input amount
-     */
-    public void makePayment(String name,String mobile, String email, String amount) {
-        /**
-         * You need to pass current activity in order to let Razorpay create CheckoutActivity
-         */
-        final Activity activity = this;
-        final Checkout co = new Checkout();
-        try {
-            JSONObject options = new JSONObject();
-            options.put("name", name);
-            options.put("description", "Chat");
-            options.put("currency", "INR");
-            options.put("amount", amount);
-            JSONObject preFill = new JSONObject();
-            preFill.put("email", email);
-            preFill.put("contact", mobile);
-            options.put("prefill", preFill);
-            co.open(activity, options);
-        } catch (Exception e) {
-            Toast.makeText(activity, "Error in payment ", Toast.LENGTH_SHORT)
-                    .show();
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onExternalWalletSelected(String s, PaymentData paymentData) {
-
-    }
-
-    /**
-     * if payment success then update user payment status ture at database
-     * once user datails updated then lunch chat activity
-     * @param razorpayPaymentID
-     */
-    @Override
-    public void onPaymentSuccess(String razorpayPaymentID) {
-        try {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-            ref.child("users").child(currentUserId).child("paid").setValue(true);
-            startActivity(new Intent(getApplicationContext(), ChatActivity.class));
-        } catch (Exception e) {
-            // TODO handle this error
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onPaymentError(int i, String s) {
-    // TODO handle this error
     }
 
     @Override

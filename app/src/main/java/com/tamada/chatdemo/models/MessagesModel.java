@@ -4,15 +4,15 @@ package com.tamada.chatdemo.models;
  * Created by inventbird on 31/10/17.
  */
 
-public class Message {
+public class MessagesModel {
     private String fromName;
     private String fromId;
     private String message;
 
-    public Message() {
+    public MessagesModel() {
     }
 
-    public Message(String fromName, String fromId, String message) {
+    public MessagesModel(String fromName, String fromId, String message) {
         this.fromName = fromName;
         this.fromId = fromId;
         this.message = message;

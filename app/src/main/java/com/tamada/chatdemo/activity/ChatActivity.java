@@ -22,8 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.tamada.chatdemo.R;
 import com.tamada.chatdemo.adapters.MessagesAdapter;
 import com.tamada.chatdemo.helper.PreferManager;
-import com.tamada.chatdemo.models.Message;
-import com.tamada.chatdemo.models.User;
+import com.tamada.chatdemo.models.MessagesModel;
+import com.tamada.chatdemo.models.UserModel;
 
 import java.util.ArrayList;
 
@@ -54,9 +54,9 @@ public class ChatActivity extends AppCompatActivity {
     private String chatId;
     private String currentUserId,  currentUserName,currentUserEmail;
     private MessagesAdapter messagesAdapter;
-    private ArrayList<Message> latLongModelArrayList;
+    private ArrayList<MessagesModel> latLongModelArrayList;
     private DatabaseReference mFirebaseDatabase;
-    private User currentUser;
+    private UserModel currentUserModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,13 +93,13 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
-        Log.e(TAG, "current User: " + currentUser);
+        Log.e(TAG, "current UserModel: " + currentUserModel);
 
         mFirebaseInstance.getReference("users").child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                currentUser = dataSnapshot.getValue(User.class);
-                Log.e(TAG, "current User: " + currentUser);
+                currentUserModel = dataSnapshot.getValue(UserModel.class);
+                Log.e(TAG, "current UserModel: " + currentUserModel);
             }
 
             @Override
@@ -114,7 +114,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.e(TAG, "onDataChange");
                 latLongModelArrayList.clear();
                 for (DataSnapshot noteSnapshot : dataSnapshot.getChildren()) {
-                    Message note = noteSnapshot.getValue(Message.class);
+                    MessagesModel note = noteSnapshot.getValue(MessagesModel.class);
                     latLongModelArrayList.add(note);
                 }
                 messagesAdapter = new MessagesAdapter(latLongModelArrayList, getApplicationContext(), currentUserName);
@@ -143,8 +143,8 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         String messageId = mFirebaseDatabase.push().getKey();
-        Message message = new Message(currentUser.getUserName(), currentUser.getId(), strInputMessge);
-        mFirebaseDatabase.child(messageId).setValue(message);
+        MessagesModel messagesModel = new MessagesModel(currentUserModel.getUserName(), currentUserModel.getId(), strInputMessge);
+        mFirebaseDatabase.child(messageId).setValue(messagesModel);
         etInputMessage.setText("");
     }
 

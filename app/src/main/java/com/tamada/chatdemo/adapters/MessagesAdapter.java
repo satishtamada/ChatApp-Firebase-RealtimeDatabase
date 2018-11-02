@@ -3,7 +3,6 @@ package com.tamada.chatdemo.adapters;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tamada.chatdemo.R;
-import com.tamada.chatdemo.models.Message;
+import com.tamada.chatdemo.models.MessagesModel;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
  * Created by satish .
  */
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
-    private final List<Message> messageList;
+    private final List<MessagesModel> messagesModelList;
     private final Context context;
     private String currentUserName;
 
@@ -34,8 +33,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     }
 
 
-    public MessagesAdapter(List<Message> messageList, Context context, String currentUserName) {
-        this.messageList = messageList;
+    public MessagesAdapter(List<MessagesModel> messagesModelList, Context context, String currentUserName) {
+        this.messagesModelList = messagesModelList;
         this.context = context;
         this.currentUserName = currentUserName;
     }
@@ -49,9 +48,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Message message = messageList.get(position);
+        final MessagesModel messagesModel = messagesModelList.get(position);
         //set gravity for current user messages
-        if (currentUserName.equals(message.getFromName())) {
+        if (currentUserName.equals(messagesModel.getFromName())) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -62,13 +61,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             holder.lblName.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
 
         }
-        holder.lblName.setText(message.getMessage());
+        holder.lblName.setText(messagesModel.getMessage());
 
     }
 
     @Override
     public int getItemCount() {
-        return messageList.size();
+        return messagesModelList.size();
     }
 
 }

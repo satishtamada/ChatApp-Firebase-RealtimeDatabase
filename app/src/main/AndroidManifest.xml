@@ -29,9 +29,6 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_uJmv0AK2JLwkj0" />
     </application>
 
 </manifest>
