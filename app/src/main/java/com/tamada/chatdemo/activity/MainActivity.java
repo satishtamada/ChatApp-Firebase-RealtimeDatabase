@@ -146,8 +146,7 @@ public class MainActivity extends AppCompatActivity implements PaymentResultList
         layoutChatHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkPaymentStatus();
-
+                startActivity(new Intent(getApplicationContext(), ChatActivity.class));
             }
         });
 

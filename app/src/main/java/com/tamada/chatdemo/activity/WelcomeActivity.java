@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tamada.chatdemo.R;
+import com.tamada.chatdemo.helper.AppController;
+import com.tamada.chatdemo.helper.PreferManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +29,8 @@ public class WelcomeActivity extends AppCompatActivity {
     @BindView(R.id.idBtnSignup)
     Button btnSignup;
 
+    private PreferManager preferManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
+        }
+        preferManager=new PreferManager(AppController.getInstance().getApplicationContext());
+        if (preferManager.getUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+            return;
         }
     }
 

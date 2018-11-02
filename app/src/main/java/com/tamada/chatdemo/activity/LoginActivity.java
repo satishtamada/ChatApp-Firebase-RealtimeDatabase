@@ -33,13 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.input_email)
     EditText inputEmail;
 
-    @BindView(R.id.input_name)
-    EditText inputName;
-
     @BindView(R.id.idInputPassword)
     EditText etInputPasswrod;
 
-    @BindView(R.id.btn_login)
+    @BindView(R.id.idBtnLogin)
     Button btnLogin;
 
     @BindView(R.id.progressBar)
@@ -92,18 +89,17 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * method login perform input validation
      */
-    @OnClick(R.id.btn_login)
+    @OnClick(R.id.idBtnLogin)
     public void login() {
         String email = inputEmail.getText().toString().trim();
-        String name = inputName.getText().toString().trim();
-        String password = inputName.getText().toString();
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
+        String password = etInputPasswrod.getText().toString();
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(getApplicationContext(), getString(R.string.msg_please_enter_details), Toast.LENGTH_SHORT).show();
         } else if(!isValidEmail(email)){
             Toast.makeText(getApplicationContext(),getString(R.string.lbl_email_error),Toast.LENGTH_SHORT).show();
         }else {
             progressBar.setVisibility(View.VISIBLE);
-            userLogin(name, email, password);
+            userLogin( email, password);
         }
     }
 
@@ -111,11 +107,10 @@ public class LoginActivity extends AppCompatActivity {
      * method checks number of users in realtime database if count is less than two it allows to
      * create a user in to database otherwise shows error message
      *
-     * @param name     input name
      * @param email    input email
      * @param password input password
      */
-    private void userLogin(String name, String email, String password) {
+    private void userLogin( String email, String password) {
         if (userCount >= 2) {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), getString(R.string.error_user_count_increased), Toast.LENGTH_SHORT).show();
@@ -127,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             userId = mFirebaseDatabase.push().getKey();
         }
         //by default user payment is false
-        User user = new User(userId, name, email, password, false);
+        User user = new User(userId, "", email, password, false);
         mFirebaseDatabase.child(userId).setValue(user);
         preferManager.storeUser(user);
         progressBar.setVisibility(View.GONE);
