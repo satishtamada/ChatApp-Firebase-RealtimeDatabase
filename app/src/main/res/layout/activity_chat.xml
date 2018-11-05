@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#90ffffff"
+    android:background="#c2c2c2"
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
@@ -25,12 +25,12 @@
         android:visibility="gone" />
 
     <RelativeLayout
+        android:layout_margin="3dp"
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorWhite"
-        android:padding="5dp">
+        android:background="@color/colorWhite">
 
         <EditText
             android:id="@+id/input_message"
