@@ -73,7 +73,7 @@ public class SignupActivity extends AppCompatActivity {
         mFirebaseDatabase = mFirebaseInstance.getReference("users");
         /**
          * checks number of users in db
-         */
+         *//*
         mFirebaseDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,7 +87,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 progressBar.setVisibility(View.GONE);
             }
-        });
+        });*/
     }
 
     /**
@@ -117,19 +117,14 @@ public class SignupActivity extends AppCompatActivity {
      * @param password input password
      */
     private void userLogin(String name, String email, String password) {
-        if (userCount >= 2) {
-            progressBar.setVisibility(View.GONE);
-            Toast.makeText(getApplicationContext(), getString(R.string.error_user_count_increased), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (TextUtils.isEmpty(userId)) {
             //get child node id
             userId = mFirebaseDatabase.push().getKey();
         }
         //by default userModel payment is false
-        UserModel userModel = new UserModel(userId, name, email, password, false);
-        mFirebaseDatabase.child(userId).setValue(userModel);
+        UserModel userModel = new UserModel(userId, name, email, password);
+        String userApiKey=email.replace(".","-");
+        mFirebaseDatabase.child(userApiKey+password).setValue(userModel);
         preferManager.storeUser(userModel);
         progressBar.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), MainActivity.class));

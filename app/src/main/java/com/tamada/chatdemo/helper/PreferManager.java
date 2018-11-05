@@ -58,7 +58,7 @@ public class PreferManager {
             api_key = pref.getString(KEY_ID, null);
             email = pref.getString(KEY_EMAIL, null);
             name = pref.getString(KEY_USER_NAME, null);
-            return new UserModel(api_key, name, email, "", false);
+            return new UserModel(api_key, name, email, "");
         }
         return null;
     }
@@ -80,7 +80,6 @@ public class PreferManager {
         editor.putString(KEY_ID, userModel.getId());
         editor.putString(KEY_EMAIL, userModel.getEmail());
         editor.putString(KEY_USER_NAME, userModel.getUserName());
-        editor.putBoolean(IS_PAYMENT_SUCCESS, userModel.isPaid());
         editor.commit();
     }
 

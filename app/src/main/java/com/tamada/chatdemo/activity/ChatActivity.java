@@ -1,7 +1,10 @@
 package com.tamada.chatdemo.activity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,8 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.tamada.chatdemo.R;
 import com.tamada.chatdemo.adapters.MessagesAdapter;
 import com.tamada.chatdemo.helper.PreferManager;
+import com.tamada.chatdemo.models.ConnectionModel;
 import com.tamada.chatdemo.models.MessagesModel;
-import com.tamada.chatdemo.models.UserModel;
 
 import java.util.ArrayList;
 
@@ -41,7 +45,7 @@ public class ChatActivity extends AppCompatActivity {
     EditText etInputMessage;
 
     @BindView(R.id.btn_send)
-    Button btnSendMessage;
+    ImageView btnSendMessage;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -50,79 +54,76 @@ public class ChatActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     private PreferManager preferManager;
-    private FirebaseDatabase mFirebaseInstance;
+    private FirebaseDatabase firebaseDatabase;
     private String chatId;
-    private String currentUserId,  currentUserName,currentUserEmail;
+    private String userId, userName, userEmail;
     private MessagesAdapter messagesAdapter;
-    private ArrayList<MessagesModel> latLongModelArrayList;
-    private DatabaseReference mFirebaseDatabase;
-    private UserModel currentUserModel;
+    private ArrayList<MessagesModel> messagesModelArrayList;
+    private DatabaseReference databaseReference;
+    private String friendName;
+    private String friendId;
+    private String connectionId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
-
+        Intent intent = getIntent();
+        friendName = intent.getStringExtra("friendName");
+        friendId = intent.getStringExtra("friendId");
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("messages");
+            getSupportActionBar().setTitle(friendName);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        mFirebaseInstance = FirebaseDatabase.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         preferManager = new PreferManager(getApplicationContext());
-        currentUserId = preferManager.getUser().getId();
-        currentUserName = preferManager.getUser().getUserName();
-        currentUserEmail=preferManager.getUser().getEmail();
-
-        FirebaseDatabase mFirebaseInstance = FirebaseDatabase.getInstance();
-        // get reference to 'latlong' node
-        latLongModelArrayList = new ArrayList<>();
+        userId = preferManager.getUser().getId();
+        userName = preferManager.getUser().getUserName();
+        userEmail = preferManager.getUser().getEmail();
+        messagesModelArrayList = new ArrayList<>();
+        messagesAdapter = new MessagesAdapter(messagesModelArrayList, getApplicationContext(), userName);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        progressBar.setVisibility(View.VISIBLE);
-        mFirebaseDatabase = mFirebaseInstance.getReference("messages");
+        recyclerView.setAdapter(messagesAdapter);
+        // progressBar.setVisibility(View.VISIBLE);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("messages");
+
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 String strInputMessge = etInputMessage.getText().toString().trim();
                 if (strInputMessge.length() != 0) {
-                    sendMessage(strInputMessge);
+                    String chatId = databaseReference.push().getKey();
+
+                    databaseReference.child(connectionId).child(chatId).setValue(new MessagesModel(userName, userId, strInputMessge));
+                    etInputMessage.setText("");
                 }
-            }
-        });
-        Log.e(TAG, "current UserModel: " + currentUserModel);
-
-        mFirebaseInstance.getReference("users").child(currentUserId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                currentUserModel = dataSnapshot.getValue(UserModel.class);
-                Log.e(TAG, "current UserModel: " + currentUserModel);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
 
-        mFirebaseDatabase.addValueEventListener(new ValueEventListener() {
+        databaseReference.child(userId + friendId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(TAG, "onDataChange");
-                latLongModelArrayList.clear();
+                messagesModelArrayList.clear();
                 for (DataSnapshot noteSnapshot : dataSnapshot.getChildren()) {
                     MessagesModel note = noteSnapshot.getValue(MessagesModel.class);
-                    latLongModelArrayList.add(note);
+                    assert note != null;
+                    messagesModelArrayList.add(note);
                 }
-                messagesAdapter = new MessagesAdapter(latLongModelArrayList, getApplicationContext(), currentUserName);
-                recyclerView.setAdapter(messagesAdapter);
-                /**
-                 * once data fetched visible recyclerview and hide progressbar
-                 */
-                recyclerView.setVisibility(View.VISIBLE);
+                if (messagesModelArrayList.size() > 0) {
+                    messagesAdapter.notifyDataSetChanged();
+                    recyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.GONE);
+                }
                 progressBar.setVisibility(View.GONE);
             }
 
@@ -132,19 +133,18 @@ public class ChatActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
-
     }
 
 
     private void sendMessage(String strInputMessge) {
-        if (TextUtils.isEmpty(chatId)) {
+     /*   if (TextUtils.isEmpty(chatId)) {
             //get child node id
-            chatId = mFirebaseDatabase.push().getKey();
-        }
-
-        String messageId = mFirebaseDatabase.push().getKey();
-        MessagesModel messagesModel = new MessagesModel(currentUserModel.getUserName(), currentUserModel.getId(), strInputMessge);
-        mFirebaseDatabase.child(messageId).setValue(messagesModel);
+            chatId = databaseReference.push().getKey();
+        }*/
+        String messageId = databaseReference.push().getKey();
+        MessagesModel messagesModel = new MessagesModel(friendName, friendId, strInputMessge);
+        ConnectionModel connectionModel = new ConnectionModel(userId + friendId, messagesModel);
+        databaseReference.setValue(connectionModel);
         etInputMessage.setText("");
     }
 

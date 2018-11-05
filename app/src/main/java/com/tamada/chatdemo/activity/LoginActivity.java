@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tamada.chatdemo.R;
+import com.tamada.chatdemo.helper.AppController;
 import com.tamada.chatdemo.helper.PreferManager;
 import com.tamada.chatdemo.models.UserModel;
 import com.tamada.chatdemo.receivers.ConnectivityReceiver;
@@ -62,28 +63,12 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         if (!ConnectivityReceiver.isConnected()) {
             Toast.makeText(getApplicationContext(), getString(R.string.lbl_error_internet), Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             progressBar.setVisibility(View.VISIBLE);
         }
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("users");
-        /**
-         * checks number of users in db
-         */
-        mFirebaseDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("value is", "" + dataSnapshot.getChildrenCount());
-                userCount = dataSnapshot.getChildrenCount();
-                Log.e("user count", "here" + userCount);
-                progressBar.setVisibility(View.GONE);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
     }
 
     /**
@@ -95,11 +80,11 @@ public class LoginActivity extends AppCompatActivity {
         String password = etInputPasswrod.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(getApplicationContext(), getString(R.string.msg_please_enter_details), Toast.LENGTH_SHORT).show();
-        } else if(!isValidEmail(email)){
-            Toast.makeText(getApplicationContext(),getString(R.string.lbl_email_error),Toast.LENGTH_SHORT).show();
-        }else {
+        } else if (!isValidEmail(email)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.lbl_email_error), Toast.LENGTH_SHORT).show();
+        } else {
             progressBar.setVisibility(View.VISIBLE);
-            userLogin( email, password);
+            userLogin(email, password);
         }
     }
 
@@ -110,24 +95,38 @@ public class LoginActivity extends AppCompatActivity {
      * @param email    input email
      * @param password input password
      */
-    private void userLogin( String email, String password) {
-        if (userCount >= 2) {
-            progressBar.setVisibility(View.GONE);
-            Toast.makeText(getApplicationContext(), getString(R.string.error_user_count_increased), Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private void userLogin(String email, String password) {
+        /**
+         * checks number of users in db
+         */
+        String apiKey = email.replace(".", "-");
+        mFirebaseDatabase.child(apiKey + password).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    if (dataSnapshot.getChildrenCount() > 0) {
+                        UserModel userModel = dataSnapshot.getValue(UserModel.class);
+                        if (userModel != null) {
+                            preferManager.storeUser(userModel);
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(AppController.getInstance().getApplicationContext(), "Unable to fetch the user info", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(AppController.getInstance().getApplicationContext(), "User not exits", Toast.LENGTH_SHORT).show();
+                    }
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
 
-        if (TextUtils.isEmpty(userId)) {
-            //get child node id
-            userId = mFirebaseDatabase.push().getKey();
-        }
-        //by default userModel payment is false
-        UserModel userModel = new UserModel(userId, "", email, password, false);
-        mFirebaseDatabase.child(userId).setValue(userModel);
-        preferManager.storeUser(userModel);
-        progressBar.setVisibility(View.GONE);
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        finish();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+
     }
 
     private boolean isValidEmail(String email) {

@@ -59,9 +59,10 @@
             </LinearLayout>
 
             <ImageView
+                android:padding="5dp"
                 android:id="@+id/idDot"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="10dp"

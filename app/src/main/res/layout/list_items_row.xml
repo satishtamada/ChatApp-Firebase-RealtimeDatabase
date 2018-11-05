@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_margin="10dp"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
     <TextView
-
+        android:background="@drawable/bg_message"
         android:textStyle="bold"
         android:textSize="18sp"
         android:text="fafasf"
-        android:padding="15sp"
+        android:padding="10sp"
         android:id="@+id/idMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

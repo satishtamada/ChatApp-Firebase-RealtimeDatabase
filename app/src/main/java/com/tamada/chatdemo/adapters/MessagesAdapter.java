@@ -56,7 +56,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             holder.lblName.setLayoutParams(params);
            // holder.lblName.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
-            holder.lblName.setTextColor(ContextCompat.getColor(context,R.color.colorAccent));
+            holder.lblName.setTextColor(ContextCompat.getColor(context,R.color.colorPrimaryDark));
         } else {
             holder.lblName.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
 
