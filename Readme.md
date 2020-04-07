@@ -1,4 +1,4 @@
-![alt tag](https://github.com/satishtamada/ChatApp-Firebase-RealtimeDatabase/tree/master/screens/1.png)
+![alt tag](https://github.com/satishtamada/ChatApp-Firebase-RealtimeDatabase/blob/master/screens/1.png)
 ![alt tag](https://github.com/satishtamada/ChatApp-Firebase-RealtimeDatabase/tree/master/screens/2.png)
 ![alt tag](https://github.com/satishtamada/ChatApp-Firebase-RealtimeDatabase/tree/master/screens/3.png)
 ![alt tag](https://github.com/satishtamada/ChatApp-Firebase-RealtimeDatabase/tree/master/screens/4.png)
