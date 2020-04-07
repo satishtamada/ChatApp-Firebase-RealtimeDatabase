@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
             name="chatAdapter"
             type="com.tamada.chatdemo.adapters.MessagesAdapter" />
     </data>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,23 +34,24 @@
             android:visibility="gone" />
 
         <RelativeLayout
-            android:layout_margin="3dp"
+            android:padding="3dp"
             android:id="@+id/footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/bg_message">
+            android:layout_margin="3dp"
+            android:background="@drawable/bg_send_msg">
 
             <EditText
                 android:id="@+id/input_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/btn_send"
                 android:layout_toStartOf="@+id/btn_send"
-                android:background="@color/colorWhite"
-                android:hint="send message..."
-                android:padding="15sp" />
+                android:layout_toLeftOf="@+id/btn_send"
+                android:background="@drawable/bg_input_msg"
+                android:hint="@string/send_message"
+                android:padding="10sp" />
 
             <ImageView
                 android:id="@+id/btn_send"

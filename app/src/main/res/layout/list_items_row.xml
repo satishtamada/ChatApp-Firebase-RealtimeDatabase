@@ -5,14 +5,6 @@
     android:layout_margin="10dp"
     android:orientation="vertical">
 
-
-    <ImageView
-        android:layout_centerVertical="true"
-        android:id="@+id/idIcon"
-        android:src="@drawable/ic_user"
-        android:layout_width="35dp"
-        android:layout_height="35dp"/>
-
     <TextView
         android:layout_toRightOf="@+id/idIcon"
         android:id="@+id/idMessage"

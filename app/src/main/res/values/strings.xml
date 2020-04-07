@@ -26,4 +26,5 @@
         completions."
     </string>
     <string name="lbl_phone">Phone</string>
+    <string name="send_message">send message...</string>
 </resources>

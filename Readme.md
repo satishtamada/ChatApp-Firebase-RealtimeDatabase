@@ -1,0 +1,5 @@
+![alt tag](https://github.com/satishtamada/NewsApp-React-Native/blob/master/screensshots/ic_banner.jpg)
+![alt tag](https://github.com/satishtamada/NewsApp-React-Native/blob/master/screensshots/ic_banner.jpg)
+![alt tag](https://github.com/satishtamada/NewsApp-React-Native/blob/master/screensshots/ic_banner.jpg)
+![alt tag](https://github.com/satishtamada/NewsApp-React-Native/blob/master/screensshots/ic_banner.jpg)
+![alt tag](https://github.com/satishtamada/NewsApp-React-Native/blob/master/screensshots/ic_banner.jpg)
