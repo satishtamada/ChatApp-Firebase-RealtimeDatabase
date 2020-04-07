@@ -1,5 +1,6 @@
 package com.tamada.chatdemo.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -91,6 +93,7 @@ public class ChatActivity extends AppCompatActivity {
                     String chatId = databaseReference.push().getKey();
                     databaseReference.child("1111").child(chatId).setValue(new MessagesModel(userName, userId, strInputMessge));
                     binding.inputMessage.setText("");
+                    hideKeyboard();
                 }
             }
         });
@@ -108,6 +111,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (messagesModelArrayList.size() > 0) {
                     messagesAdapter.notifyDataSetChanged();
                     binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.recyclerView.scrollToPosition(messagesModelArrayList.size()-1);
                 } else {
                     binding.recyclerView.setVisibility(View.GONE);
                 }
@@ -122,6 +126,16 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    public  void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = this.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     public static String random() {
         Random generator = new Random();

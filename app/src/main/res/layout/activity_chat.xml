@@ -43,6 +43,7 @@
             android:background="@drawable/bg_send_msg">
 
             <EditText
+                android:maxLines="1"
                 android:id="@+id/input_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
