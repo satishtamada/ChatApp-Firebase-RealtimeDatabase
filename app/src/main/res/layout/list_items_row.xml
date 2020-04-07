@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_toRightOf="@+id/idIcon"
         android:id="@+id/idMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

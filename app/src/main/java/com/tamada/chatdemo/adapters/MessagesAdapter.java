@@ -1,6 +1,8 @@
 package com.tamada.chatdemo.adapters;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,15 +21,26 @@ import java.util.List;
 /**
  * Created by satish .
  */
-public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
+public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final List<MessagesModel> messagesModelList;
     private final Context context;
     private String currentUserName;
+    public static final int SENDER_VALUE=1;
+    public static final int RECEIVER_VALUE=2;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class SenderViewHolder extends RecyclerView.ViewHolder {
         public final TextView lblName;
 
-        public MyViewHolder(View view) {
+        public SenderViewHolder(View view) {
+            super(view);
+            lblName = (TextView) view.findViewById(R.id.idMessage);
+        }
+    }
+
+    public class ReceiverViewHolder extends RecyclerView.ViewHolder {
+        public final TextView lblName;
+
+        public ReceiverViewHolder(View view) {
             super(view);
             lblName = (TextView) view.findViewById(R.id.idMessage);
         }
@@ -41,30 +54,47 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_items_row, parent, false);
-        return new MyViewHolder(itemView);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        RecyclerView.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+        switch (viewType) {
+            case SENDER_VALUE:
+                View v1 = inflater.inflate(R.layout.item_sender_msg, parent, false);
+                viewHolder = new SenderViewHolder(v1);
+                break;
+
+            default:
+                View v = inflater.inflate(R.layout.item_reciver_msg, parent, false);
+                viewHolder = new ReceiverViewHolder(v);
+                break;
+        }
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public int getItemViewType(int position) {
+        MessagesModel messagesModel=messagesModelList.get(position);
+        if(currentUserName.equals(messagesModel.getFromName())){
+            return SENDER_VALUE;
+        }else {
+           return RECEIVER_VALUE;
+        }
+    }
+
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MessagesModel messagesModel = messagesModelList.get(position);
         //set gravity for current user messages
-        if (currentUserName.equals(messagesModel.getFromName())) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.lblName.setLayoutParams(params);
-            holder.lblName.setTextColor(ContextCompat.getColor(context,R.color.colorWhite));
-            holder.lblName.setBackground(ContextCompat.getDrawable(context,R.drawable.bg_sender_msg));
-        } else {
-            holder.lblName.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
-            holder.lblName.setTextColor(ContextCompat.getColor(context,R.color.colorBlack));
-            holder.lblName.setBackground(ContextCompat.getDrawable(context,R.drawable.bg_receiver_msg));
+        if(holder.getItemViewType()==SENDER_VALUE){
+            SenderViewHolder viewHolder=(SenderViewHolder) holder;
+            viewHolder.lblName.setText(messagesModel.getMessage());
+        }else{
+            ReceiverViewHolder viewHolder=(ReceiverViewHolder) holder;
+            viewHolder.lblName.setText(messagesModel.getMessage());
         }
-        holder.lblName.setText(messagesModel.getMessage());
-
     }
 
     @Override
