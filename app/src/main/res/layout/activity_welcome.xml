@@ -1,69 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:orientation="vertical">
-
-    <LinearLayout
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_margin="40dp"
-        android:gravity="center"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
-        <ImageView
-            android:padding="10dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_chat_logo" />
-
-        <TextView
-
-            android:textSize="25sp"
-            android:textAllCaps="true"
-            android:textStyle="bold"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="40dp"
             android:gravity="center"
-            android:text="chat app"
-            android:textColor="@color/colorWhite" />
-        <TextView
-            android:textSize="17sp"
-            android:textAllCaps="false"
+            android:orientation="vertical">
+
+            <ImageView
+                android:padding="10dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_chat_logo" />
+
+            <TextView
+
+                android:textSize="25sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="chat app"
+                android:textColor="@color/colorWhite" />
+            <TextView
+                android:textSize="17sp"
+                android:textAllCaps="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="firebase realtime database"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="1dp"
+            android:background="@color/colorWhite"
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="firebase realtime database"
-            android:textColor="@color/colorWhite" />
-    </LinearLayout>
+            android:weightSum="2">
 
-    <LinearLayout
-        android:paddingTop="1dp"
-        android:background="@color/colorWhite"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="2">
+            <Button
+                android:id="@+id/idBtnLogin"
+                android:layout_marginRight="1dp"
+                android:textColor="@color/colorWhite"
+                android:text="Login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark" />
 
-        <Button
-            android:id="@+id/idBtnLogin"
-            android:layout_marginRight="1dp"
-            android:textColor="@color/colorWhite"
-            android:text="Login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryDark" />
-
-        <Button
-            android:id="@+id/idBtnSignup"
-            android:textColor="@color/colorWhite"
-            android:text="Signup"
-            android:background="@color/colorPrimaryDark"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>
-</RelativeLayout>
+            <Button
+                android:id="@+id/idBtnSignup"
+                android:textColor="@color/colorWhite"
+                android:text="Signup"
+                android:background="@color/colorPrimaryDark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

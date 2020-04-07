@@ -1,10 +1,12 @@
 package com.tamada.chatdemo.helper;
 
 import android.content.Intent;
-import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
+import androidx.multidex.MultiDexApplication;
+
 import com.tamada.chatdemo.receivers.ConnectivityReceiver;
+
 
 /**
  * Created by satish .

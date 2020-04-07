@@ -2,12 +2,7 @@ package com.tamada.chatdemo.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -18,6 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tamada.chatdemo.R;
 import com.tamada.chatdemo.adapters.ContactsAdapter;
+import com.tamada.chatdemo.databinding.ActivityMainBinding;
 import com.tamada.chatdemo.helper.AppController;
 import com.tamada.chatdemo.helper.PreferManager;
 import com.tamada.chatdemo.models.ContactModel;
@@ -33,21 +35,7 @@ import com.tamada.chatdemo.receivers.ConnectivityReceiver;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity {
-
-    @BindView(R.id.emptyList)
-    TextView lblEmptyList;
-
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
-
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-
-
     private PreferManager preferManager;
     private String currentUserId, currentUserEmail, currentUserName;
     private DatabaseReference mFirebaseDatabase;
@@ -56,26 +44,24 @@ public class MainActivity extends AppCompatActivity {
 
     private ContactsAdapter contactsAdapter;
     private ArrayList<ContactModel> contactModelArrayList;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_main);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Friends");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        ButterKnife.bind(this);
         preferManager = new PreferManager(getApplicationContext());
         currentUserId = preferManager.getUser().getId();
         currentUserEmail = preferManager.getUser().getEmail();
         currentUserName = preferManager.getUser().getUserName();
         contactModelArrayList = new ArrayList<>();
         contactsAdapter = new ContactsAdapter(contactModelArrayList, this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(contactsAdapter);
+        binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
+        binding.recyclerView.setAdapter(contactsAdapter);
 
         /**
          * checks is internet enable or not
@@ -85,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("users");
-        progressBar.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
         /**
          * get all user from the database
          */
@@ -99,20 +85,21 @@ public class MainActivity extends AppCompatActivity {
                     if (!note.getId().equals(currentUserId))//remove current user from the list
                         contactModelArrayList.add(note);
                 }
+                Log.e("here",""+contactModelArrayList.size());
                 if (contactModelArrayList.size() > 0) {
                     contactsAdapter.notifyDataSetChanged();
-                    recyclerView.setVisibility(View.VISIBLE);
-                    lblEmptyList.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.emptyList.setVisibility(View.GONE);
                 } else {
-                    lblEmptyList.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
+                    binding.emptyList.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.GONE);
                 }
-                progressBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                progressBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -123,16 +110,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentUserModel = dataSnapshot.getValue(UserModel.class);
-                progressBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                progressBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(AppController.getInstance().getApplicationContext(), recyclerView, new ClickListener() {
+        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(AppController.getInstance().getApplicationContext(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 ContactModel contactModel = contactModelArrayList.get(position);
@@ -147,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLongClick(View view, int position) {
 
             }
-        }));
+        }));*/
 
     }
 
@@ -186,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         void onLongClick(View view, int position);
     }
 
+/*
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
@@ -226,4 +214,5 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+*/
 }
