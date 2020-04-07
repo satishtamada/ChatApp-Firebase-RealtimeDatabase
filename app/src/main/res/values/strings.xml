@@ -7,6 +7,7 @@
     <string name="error_user_count_increased">Sorry..!Two users exited.</string>
     <string name="lbl_error_internet">Please check your internet connection</string>
     <string name="lbl_email_error">Please enter valid email address</string>
+    <string name="lbl_phone_error">Please enter valid phone number</string>
     <string name="no_friend_available">No friend available</string>
     <string name="lbl_alert_title">Make Payment</string>
     <string name="lbl_alert_desc">You need to make payment for read or write messagesModel</string>
@@ -24,4 +25,5 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="lbl_phone">Phone</string>
 </resources>

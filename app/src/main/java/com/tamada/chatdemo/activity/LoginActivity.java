@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferManager = new PreferManager(getApplicationContext());
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_login);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         if (preferManager.getUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
@@ -57,21 +57,25 @@ public class LoginActivity extends AppCompatActivity {
         }
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("users");
-       binding.idBtnLogin.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String email = binding.inputEmail.getText().toString().trim();
-               String password = binding.idInputPassword.getText().toString();
-               if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                   Toast.makeText(getApplicationContext(), getString(R.string.msg_please_enter_details), Toast.LENGTH_SHORT).show();
-               } else if (!isValidEmail(email)) {
-                   Toast.makeText(getApplicationContext(), getString(R.string.lbl_email_error), Toast.LENGTH_SHORT).show();
-               } else {
-                   binding.progressBar.setVisibility(View.VISIBLE);
-                   userLogin(email, password);
-               }
-           }
-       });
+        binding.idBtnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phone = binding.inputPhone.getText().toString().trim();
+                String password = binding.idInputPassword.getText().toString();
+                if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.msg_please_enter_details), Toast.LENGTH_SHORT).show();
+                } else if (!validCellPhone(phone)) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.lbl_phone_error), Toast.LENGTH_SHORT).show();
+                } else {
+                    binding.progressBar.setVisibility(View.VISIBLE);
+                    userLogin(phone, password);
+                }
+            }
+        });
+    }
+
+    public boolean validCellPhone(String number) {
+        return android.util.Patterns.PHONE.matcher(number).matches();
     }
 
 
@@ -82,9 +86,8 @@ public class LoginActivity extends AppCompatActivity {
      * @param email    input email
      * @param password input password
      */
-   private void userLogin(String email, String password) {
-        String apiKey = email.replace(".", "-");
-        mFirebaseDatabase.child(apiKey + password).addValueEventListener(new ValueEventListener() {
+    private void userLogin(String email, String password) {
+        mFirebaseDatabase.child(email).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {

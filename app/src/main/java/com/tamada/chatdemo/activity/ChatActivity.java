@@ -32,6 +32,7 @@ import com.tamada.chatdemo.models.ConnectionModel;
 import com.tamada.chatdemo.models.MessagesModel;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -57,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_chat);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_chat);
         Intent intent = getIntent();
         friendName = intent.getStringExtra("friendName");
         friendId = intent.getStringExtra("friendId");
@@ -70,7 +71,7 @@ public class ChatActivity extends AppCompatActivity {
         preferManager = new PreferManager(getApplicationContext());
         userId = preferManager.getUser().getId();
         userName = preferManager.getUser().getUserName();
-        userEmail = preferManager.getUser().getEmail();
+        userEmail = preferManager.getUser().getPhoneNumber();
         messagesModelArrayList = new ArrayList<>();
         messagesAdapter = new MessagesAdapter(messagesModelArrayList, getApplicationContext(), userName);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -78,7 +79,6 @@ public class ChatActivity extends AppCompatActivity {
         binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerView.setAdapter(messagesAdapter);
         binding.progressBar.setVisibility(View.VISIBLE);
-
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("messages");
 
@@ -89,14 +89,14 @@ public class ChatActivity extends AppCompatActivity {
                 String strInputMessge = binding.inputMessage.getText().toString().trim();
                 if (strInputMessge.length() != 0) {
                     String chatId = databaseReference.push().getKey();
-                    databaseReference.child(connectionId).child(chatId).setValue(new MessagesModel(userName, userId, strInputMessge));
+                    databaseReference.child("1111").child(chatId).setValue(new MessagesModel(userName, userId, strInputMessge));
                     binding.inputMessage.setText("");
                 }
             }
         });
 
 
-        databaseReference.child(userId + friendId).addValueEventListener(new ValueEventListener() {
+        databaseReference.child("1111").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 messagesModelArrayList.clear();
@@ -122,6 +122,18 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+
+    public static String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(16);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
 
     private void sendMessage(String strInputMessge) {
      /*   if (TextUtils.isEmpty(chatId)) {

@@ -19,11 +19,11 @@
                 android:theme="@style/TextLabel">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_email"
+                    android:id="@+id/input_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress"
+                    android:hint="@string/lbl_phone"
+                    android:inputType="phone"
                     android:maxLines="1"
                     android:textColor="@color/colorPrimary" />
 

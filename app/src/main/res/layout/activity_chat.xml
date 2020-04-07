@@ -8,12 +8,11 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#c2c2c2"
+        android:background="@color/colorWhite"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:adapter="@{chatAdapter}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/footer"
@@ -37,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorWhite">
+            android:background="@drawable/bg_message">
 
             <EditText
                 android:id="@+id/input_message"

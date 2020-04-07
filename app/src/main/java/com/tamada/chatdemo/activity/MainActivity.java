@@ -3,6 +3,7 @@ package com.tamada.chatdemo.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -43,20 +44,20 @@ public class MainActivity extends AppCompatActivity {
     private UserModel currentUserModel;
 
     private ContactsAdapter contactsAdapter;
-    private ArrayList<ContactModel> contactModelArrayList;
+    private ArrayList<UserModel> contactModelArrayList;
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Friends");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         preferManager = new PreferManager(getApplicationContext());
         currentUserId = preferManager.getUser().getId();
-        currentUserEmail = preferManager.getUser().getEmail();
+        currentUserEmail = preferManager.getUser().getPhoneNumber();
         currentUserName = preferManager.getUser().getUserName();
         contactModelArrayList = new ArrayList<>();
         contactsAdapter = new ContactsAdapter(contactModelArrayList, this);
@@ -80,12 +81,12 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 contactModelArrayList.clear();
                 for (DataSnapshot noteSnapshot : dataSnapshot.getChildren()) {
-                    ContactModel note = noteSnapshot.getValue(ContactModel.class);
+                    UserModel note = noteSnapshot.getValue(UserModel.class);
                     assert note != null;
                     if (!note.getId().equals(currentUserId))//remove current user from the list
                         contactModelArrayList.add(note);
                 }
-                Log.e("here",""+contactModelArrayList.size());
+                Log.e("here", "" + contactModelArrayList.size());
                 if (contactModelArrayList.size() > 0) {
                     contactsAdapter.notifyDataSetChanged();
                     binding.recyclerView.setVisibility(View.VISIBLE);
@@ -119,12 +120,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(AppController.getInstance().getApplicationContext(), recyclerView, new ClickListener() {
+        binding.recyclerView.addOnItemTouchListener(new RecyclerTouchListener(AppController.getInstance().getApplicationContext(), binding.recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                ContactModel contactModel = contactModelArrayList.get(position);
+                UserModel contactModel = contactModelArrayList.get(position);
                 Intent intent = new Intent(AppController.getInstance().getApplicationContext(), ChatActivity.class);
                 intent.putExtra("friendId", contactModel.getId());
+                intent.putExtra("connectionId", contactModel.getConnectionId());
                 intent.putExtra("friendName", contactModel.getUserName());
                 // intent.putExtra("bundle", args);
                 startActivity(intent);
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLongClick(View view, int position) {
 
             }
-        }));*/
+        }));
 
     }
 
@@ -156,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
                  */
                 preferManager.clearSession();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
                 Toast.makeText(getApplicationContext(), "Successfully logged out..", Toast.LENGTH_LONG).show();
                 finish();
                 return true;
@@ -173,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
         void onLongClick(View view, int position);
     }
 
-/*
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
@@ -214,5 +214,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-*/
 }

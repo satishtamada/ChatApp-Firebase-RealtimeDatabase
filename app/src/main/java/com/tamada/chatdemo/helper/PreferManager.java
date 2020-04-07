@@ -24,8 +24,7 @@ public class PreferManager {
     private static final String KEY_ID = "id";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_USER_NAME = "name";
-    private static final String KEY_EMAIL = "email";
-    private static final String IS_PAYMENT_SUCCESS = "payment_type";
+    private static final String KEY_PHONE = "phone";
 
     @SuppressLint("CommitPrefEdits")
     public PreferManager(Context context) {
@@ -42,7 +41,7 @@ public class PreferManager {
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> profile = new HashMap<>();
         profile.put("password", pref.getString(KEY_PASSWORD, null));
-        profile.put("email", pref.getString(KEY_EMAIL, null));
+        profile.put("email", pref.getString(KEY_PHONE, null));
         profile.put("id", pref.getString(KEY_ID, null));
         profile.put("name", pref.getString(KEY_USER_NAME, null));
         return profile;
@@ -56,7 +55,7 @@ public class PreferManager {
         if (pref.getString(KEY_ID, null) != null) {
             String name, email, password, api_key;
             api_key = pref.getString(KEY_ID, null);
-            email = pref.getString(KEY_EMAIL, null);
+            email = pref.getString(KEY_PHONE, null);
             name = pref.getString(KEY_USER_NAME, null);
             return new UserModel(api_key, name, email, "");
         }
@@ -78,7 +77,7 @@ public class PreferManager {
      */
     public void storeUser(UserModel userModel) {
         editor.putString(KEY_ID, userModel.getId());
-        editor.putString(KEY_EMAIL, userModel.getEmail());
+        editor.putString(KEY_PHONE, userModel.getPhoneNumber());
         editor.putString(KEY_USER_NAME, userModel.getUserName());
         editor.commit();
     }

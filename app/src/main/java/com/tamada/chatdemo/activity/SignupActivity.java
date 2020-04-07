@@ -78,19 +78,23 @@ public class SignupActivity extends AppCompatActivity {
         binding.idBtnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = binding.inputEmail.getText().toString().trim();
+                String phone = binding.inputPhone.getText().toString().trim();
                 String name = binding.inputName.getText().toString().trim();
                 String password = binding.inputName.getText().toString();
-                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
+                if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
                     Toast.makeText(getApplicationContext(), getString(R.string.msg_please_enter_details), Toast.LENGTH_SHORT).show();
-                } else if (!isValidEmail(email)) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.lbl_email_error), Toast.LENGTH_SHORT).show();
+                } else if (!validCellPhone(phone)) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.lbl_phone_error), Toast.LENGTH_SHORT).show();
                 } else {
                     binding.progressBar.setVisibility(View.VISIBLE);
-                    userLogin(name, email, password);
+                    userLogin(name, phone, password);
                 }
             }
         });
+    }
+    public boolean validCellPhone(String number)
+    {
+        return android.util.Patterns.PHONE.matcher(number).matches();
     }
 
 
@@ -99,18 +103,17 @@ public class SignupActivity extends AppCompatActivity {
      * create a user in to database otherwise shows error message
      *
      * @param name     input name
-     * @param email    input email
+     * @param phone    input phone
      * @param password input password
      */
-    private void userLogin(String name, String email, String password) {
+    private void userLogin(String name, String phone, String password) {
         if (TextUtils.isEmpty(userId)) {
             //get child node id
             userId = mFirebaseDatabase.push().getKey();
         }
         //by default userModel payment is false
-        UserModel userModel = new UserModel(userId, name, email, password);
-        String userApiKey=email.replace(".","-");
-        mFirebaseDatabase.child(userApiKey+password).setValue(userModel);
+        UserModel userModel = new UserModel(userId, name, phone, password);
+        mFirebaseDatabase.child(phone).setValue(userModel);
         preferManager.storeUser(userModel);
         binding.progressBar.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), MainActivity.class));

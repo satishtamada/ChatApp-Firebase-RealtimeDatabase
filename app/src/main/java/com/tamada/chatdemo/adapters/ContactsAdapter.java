@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamada.chatdemo.R;
 import com.tamada.chatdemo.models.ContactModel;
+import com.tamada.chatdemo.models.UserModel;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by satish .
  */
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> {
-    private final ArrayList<ContactModel> contactModelList;
+    private final ArrayList<UserModel> contactModelList;
     private final Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -34,7 +35,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     }
 
 
-    public ContactsAdapter(ArrayList<ContactModel> contactModelList, Context context) {
+    public ContactsAdapter(ArrayList<UserModel> contactModelList, Context context) {
         this.contactModelList = contactModelList;
         this.context = context;
     }
@@ -48,9 +49,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final ContactModel messagesModel = contactModelList.get(position);
+        final UserModel messagesModel = contactModelList.get(position);
         holder.lblName.setText(messagesModel.getUserName());
-        holder.lblEmail.setText(messagesModel.getEmail());
+        holder.lblEmail.setText(messagesModel.getPhoneNumber());
 
         //set gravity for current user messages
 
