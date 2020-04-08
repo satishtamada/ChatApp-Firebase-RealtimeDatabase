@@ -19,6 +19,6 @@
         android:padding="10sp"
         android:text="fafasf"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="normal" />
 
 </RelativeLayout>

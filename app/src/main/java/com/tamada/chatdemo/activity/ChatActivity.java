@@ -75,14 +75,15 @@ public class ChatActivity extends AppCompatActivity {
         userName = preferManager.getUser().getUserName();
         userEmail = preferManager.getUser().getPhoneNumber();
         messagesModelArrayList = new ArrayList<>();
-        messagesAdapter = new MessagesAdapter(messagesModelArrayList, getApplicationContext(), userName);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("messages");
+        messagesAdapter = new MessagesAdapter(messagesModelArrayList, getApplicationContext(), userName,firebaseDatabase,databaseReference);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         binding.recyclerView.setLayoutManager(mLayoutManager);
         binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerView.setAdapter(messagesAdapter);
         binding.progressBar.setVisibility(View.VISIBLE);
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("messages");
+
 
 
         binding.btnSend.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +94,7 @@ public class ChatActivity extends AppCompatActivity {
                     String chatId = databaseReference.push().getKey();
                     databaseReference.child("1111").child(chatId).setValue(new MessagesModel(userName, userId, strInputMessge));
                     binding.inputMessage.setText("");
-                    hideKeyboard();
+                  //  hideKeyboard();
                 }
             }
         });
@@ -106,6 +107,7 @@ public class ChatActivity extends AppCompatActivity {
                 for (DataSnapshot noteSnapshot : dataSnapshot.getChildren()) {
                     MessagesModel note = noteSnapshot.getValue(MessagesModel.class);
                     assert note != null;
+                    note.setId(noteSnapshot.getKey());
                     messagesModelArrayList.add(note);
                 }
                 if (messagesModelArrayList.size() > 0) {
