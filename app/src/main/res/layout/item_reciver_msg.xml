@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginStart="60dp"
         android:visibility="gone"
         android:id="@+id/idReplyContainer"
         android:layout_width="wrap_content"
@@ -16,6 +16,7 @@
         android:orientation="horizontal">
 
         <TextView
+
             android:id="@+id/idReplyOne"
             android:padding="5dp"
             android:layout_width="wrap_content"
@@ -24,25 +25,13 @@
             android:textColor="#ff0000" />
 
         <TextView
+            android:id="@+id/idReplyTwo"
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="❤"
             android:textColor="@color/colorAccent" />
 
-        <TextView
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="❤"
-            android:textColor="@color/colorAccent" />
-
-        <TextView
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="❤"
-            android:textColor="@color/colorAccent" />
     </LinearLayout>
 
     <ImageView
@@ -72,7 +61,14 @@
 
 
     <TextView
-        android:visibility="gone"
+        android:gravity="center"
+        android:background="@drawable/bg_reply"
+        android:layout_marginLeft="-20dp"
+        android:layout_marginStart="-20dp"
+        android:layout_marginTop="-10dp"
+        android:layout_toRightOf="@+id/idMessage"
+        android:text="ff"
+        android:visibility="visible"
         android:layout_below="@+id/idMessage"
         android:id="@+id/idReply"
         android:layout_width="wrap_content"

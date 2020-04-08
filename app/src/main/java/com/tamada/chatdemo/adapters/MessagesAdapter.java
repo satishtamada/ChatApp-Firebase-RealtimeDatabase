@@ -56,7 +56,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class ReceiverViewHolder extends RecyclerView.ViewHolder {
         public final TextView lblName;
         public final TextView idReply;
-        public final TextView idReplyOne;
+        public final TextView idReplyOne, idReplyTwo;
         public final LinearLayout replyContainer;
 
         public ReceiverViewHolder(View view) {
@@ -64,6 +64,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             lblName = (TextView) view.findViewById(R.id.idMessage);
             idReply = (TextView) view.findViewById(R.id.idReply);
             idReplyOne = (TextView) view.findViewById(R.id.idReplyOne);
+            idReplyTwo = (TextView) view.findViewById(R.id.idReplyTwo);
             replyContainer = (LinearLayout) view.findViewById(R.id.idReplyContainer);
         }
     }
@@ -128,13 +129,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.lblName.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    /*ObjectAnimator textViewAnimator = (ObjectAnimator) AnimatorInflater.loadAnimator(context, R.animator.object_animator_ex);
-                    textViewAnimator.setTarget( viewHolder.replyContainer);
-                    textViewAnimator.start();
-*/
-                    Animation slideUp = AnimationUtils.loadAnimation(context, R.anim.slide_up);
-                    viewHolder.replyContainer.setVisibility(View.VISIBLE);
-                    viewHolder.replyContainer.startAnimation(slideUp);
+                    if (TextUtils.isEmpty(messagesModel.getMessageReply())) {
+                        Animation slideUp = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+                        viewHolder.replyContainer.setVisibility(View.VISIBLE);
+                        viewHolder.replyContainer.startAnimation(slideUp);
+                    }
                     return true;
                 }
             });
@@ -150,13 +149,32 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.idReplyOne.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     databaseReference.child("1111").child(messagesModel.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             dataSnapshot.getRef().child("messageReply").setValue(viewHolder.idReplyOne.getText().toString());
                             viewHolder.replyContainer.setVisibility(View.GONE);
                             messagesModel.setMessage(viewHolder.idReplyOne.getText().toString());
+                            notifyItemChanged(position);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.d("User", databaseError.getMessage());
+                        }
+                    });
+                }
+            });
+
+            viewHolder.idReplyTwo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    databaseReference.child("1111").child(messagesModel.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            dataSnapshot.getRef().child("messageReply").setValue(viewHolder.idReplyTwo.getText().toString());
+                            viewHolder.replyContainer.setVisibility(View.GONE);
+                            messagesModel.setMessage(viewHolder.idReplyTwo.getText().toString());
                             notifyItemChanged(position);
                         }
 
